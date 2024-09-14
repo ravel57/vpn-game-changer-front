@@ -46,8 +46,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import { defineComponent } from 'vue'
+import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue'
 
 const linksList: EssentialLinkProps[] = [
   {
@@ -92,7 +92,7 @@ const linksList: EssentialLinkProps[] = [
     icon: 'favorite',
     link: 'https://awesome.quasar.dev'
   }
-];
+]
 
 export default defineComponent({
   name: 'MainLayout',
@@ -110,8 +110,8 @@ export default defineComponent({
 
   methods: {
     toggleLeftDrawer () {
-      this.leftDrawerOpen = !this.leftDrawerOpen;
+      this.leftDrawerOpen = !this.leftDrawerOpen
     }
   }
-});
+})
 </script>

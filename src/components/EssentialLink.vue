@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
 export interface EssentialLinkProps {
   title: string;
@@ -52,5 +52,5 @@ export default defineComponent({
       default: ''
     }
   }
-});
+})
 </script>
