@@ -3,6 +3,7 @@ q-page(
   @input="getProcessesByName($event.target.value)"
 )
   q-input(
+    label="process name"
     v-model="processName"
   )
   q-list
@@ -25,8 +26,11 @@ q-page(
         dense
         flat
       )
-  div(style="display: flex")
+  div(
+    style="display: flex"
+  )
     q-input(
+      label="gateway"
       v-model="this.gateway"
     )
     q-btn(
@@ -80,7 +84,7 @@ export default {
   mounted () {
     axios.get('/api/v1/get-routing-ip-params')
       .then(response => {
-        this.ipParams.push(response.data)
+        this.ipParams = response.data
       })
   }
 }
