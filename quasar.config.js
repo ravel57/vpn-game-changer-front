@@ -49,7 +49,7 @@ module.exports = configure(function (/* ctx */) {
         node: 'node20'
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -65,9 +65,19 @@ module.exports = configure(function (/* ctx */) {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf (viteConf) {
+        viteConf.build = {
+          ...viteConf.build,
+          rollupOptions: {
+            output: {
+              entryFileNames: '[name].js',
+              chunkFileNames: '[name].js',
+              assetFileNames: '[name].[ext]'
+            }
+          }
+        }
+      },
       // viteVuePluginOptions: {},
-
       vitePlugins: [
         ['vite-plugin-checker', {
           vueTsc: {
@@ -147,8 +157,8 @@ module.exports = configure(function (/* ctx */) {
       injectPwaMetaTags: true,
       swFilename: 'sw.js',
       manifestFilename: 'manifest.json',
-      useCredentialsForManifestTag: false
-      // useFilenameHashes: true,
+      useCredentialsForManifestTag: false,
+      useFilenameHashes: false
       // extendGenerateSWOptions (cfg) {}
       // extendInjectManifestOptions (cfg) {},
       // extendManifestJson (json) {}

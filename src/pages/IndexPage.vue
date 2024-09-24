@@ -1,55 +1,87 @@
-<template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
-  </q-page>
+<template lang="pug">
+q-page(
+  @input="getProcessesByName($event.target.value)"
+)
+  q-input(
+    v-model="processName"
+  )
+  q-list
+    q-item-section(
+      v-for="(process, index) in processes"
+      :key="index"
+    )
+      | {{ process.command }} {{ process.ip }} : {{ process.port }}
+  q-list
+    q-item-section(
+      v-for="(param, index) in ipParams"
+      :key="index"
+      style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;"
+    )
+      span
+        | {{ param.gateWay }} {{ param.processName }}
+      q-btn(
+        icon="close"
+        @click="removeIpParams(param)"
+        dense
+        flat
+      )
+  div(style="display: flex")
+    q-input(
+      v-model="this.gateway"
+    )
+    q-btn(
+      dense
+      label="отправить gateway и применить"
+      color="primary"
+      @click="sendParams"
+    )
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { Todo, Meta } from 'components/models'
-import ExampleComponent from 'components/ExampleComponent.vue'
+import axios from 'axios'
+import { IpParams } from 'src/models/IpParams'
 
-export default defineComponent({
+export default {
   name: 'IndexPage',
 
-  components: {
-    ExampleComponent
+  components: {},
+
+  data: () => ({
+    processName: '',
+    gateway: '',
+    processes: [] as Array<string>,
+    ipParams: [] as Array<IpParams>
+  }),
+
+  methods: {
+    getProcessesByName (name: string) {
+      axios.post('/api/v1/get-processes-by-name', { name })
+        .then((response) => {
+          this.processes = response.data
+        })
+    },
+
+    sendParams () {
+      const data = new IpParams(this.gateway, this.processName)
+      axios.post('/api/v1/send-ip-params', data)
+        .then(() => {
+          this.ipParams.push(data)
+        })
+    },
+
+    removeIpParams (toRemove: IpParams): void {
+      axios.post('/api/v1/delete-ip-params', toRemove)
+        .then(() => {
+          this.ipParams = this.ipParams.filter(el => el !== toRemove)
+        })
+    }
   },
 
-  data () {
-    const todos: Todo[] = [
-      {
-        id: 1,
-        content: 'ct1'
-      },
-      {
-        id: 2,
-        content: 'ct2'
-      },
-      {
-        id: 3,
-        content: 'ct3'
-      },
-      {
-        id: 4,
-        content: 'ct4'
-      },
-      {
-        id: 5,
-        content: 'ct5'
-      }
-    ]
-
-    const meta: Meta = {
-      totalCount: 1200
-    }
-
-    return { todos, meta }
+  mounted () {
+    axios.get('/api/v1/get-routing-ip-params')
+      .then(response => {
+        this.ipParams.push(response.data)
+      })
   }
-})
+}
 </script>
