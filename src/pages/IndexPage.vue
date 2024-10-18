@@ -12,6 +12,15 @@ q-page(
       :key="index"
     )
       | {{ process.command }} {{ process.ip }} : {{ process.port }}
+  q-input(
+    label="gateway"
+    v-model="this.gateway"
+  )
+  q-btn(
+    label="отправить gateway, process name и применить"
+    color="primary"
+    @click="sendParams"
+  )
   q-list
     q-item-section(
       v-for="(param, index) in ipParams"
@@ -26,19 +35,6 @@ q-page(
         dense
         flat
       )
-  div(
-    style="display: flex"
-  )
-    q-input(
-      label="gateway"
-      v-model="this.gateway"
-    )
-    q-btn(
-      dense
-      label="отправить gateway и применить"
-      color="primary"
-      @click="sendParams"
-    )
 </template>
 
 <script lang="ts">
